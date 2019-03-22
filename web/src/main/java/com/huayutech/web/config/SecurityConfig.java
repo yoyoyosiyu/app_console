@@ -28,11 +28,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //super.configure(http);
         http.formLogin().loginPage("/login");
-        //http.csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/login", "/webjars/**", "/register").permitAll()
-                .antMatchers(HttpMethod.POST, "/register").permitAll()
-                .anyRequest().authenticated();
+        http.csrf().disable();
+
+        // DEBUG: disable the security check
+        http.authorizeRequests().anyRequest().permitAll();
+
+//        http.authorizeRequests()
+//                .antMatchers("/login", "/webjars/**", "/register").permitAll()
+//                .antMatchers(HttpMethod.POST, "/register").permitAll()
+//                .anyRequest().authenticated();
     }
 
 
