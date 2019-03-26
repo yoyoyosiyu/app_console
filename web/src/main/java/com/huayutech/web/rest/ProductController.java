@@ -9,10 +9,8 @@ import com.huayutech.web.repository.product.ProductImageRepository;
 import com.huayutech.web.repository.product.ProductRepository;
 import com.huayutech.web.repository.resource.FileRepository;
 import com.huayutech.web.repository.resource.FileUsageRepository;
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;

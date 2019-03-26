@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = "productCategories")
+@EqualsAndHashCode(exclude = "childCategories")
 @Entity
 public class ProductCategory {
 
@@ -22,5 +22,5 @@ public class ProductCategory {
 
 
     @OneToMany
-    public Set<ProductCategory> productCategories;
+    public Set<ProductCategory> childCategories;
 }
