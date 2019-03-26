@@ -3,10 +3,16 @@ package com.huayutech.web.rest;
 
 import com.huayutech.web.domain.product.Product;
 import com.huayutech.web.domain.product.ProductImage;
+import com.huayutech.web.domain.resouce.File;
+import com.huayutech.web.domain.resouce.FileUsage;
 import com.huayutech.web.repository.product.ProductImageRepository;
 import com.huayutech.web.repository.product.ProductRepository;
+import com.huayutech.web.repository.resource.FileRepository;
+import com.huayutech.web.repository.resource.FileUsageRepository;
+import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +28,12 @@ public class ProductController {
 
     @Autowired
     ProductImageRepository productImageRepository;
+
+    @Autowired
+    FileRepository fileRepository;
+
+    @Autowired
+    FileUsageRepository fileUsageRepository;
 
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -43,15 +55,59 @@ public class ProductController {
 
     @PostMapping("/{id}/images")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void addNewImageToProduct(@PathVariable(name = "id") Long productId, @RequestBody ProductImage productImage) {
+    public void addNewImageToProduct(@PathVariable(name = "id") Long productId, @RequestBody List<String> images) {
 
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new EntityNotFoundException(String.format("product with id %s does not exist", productId)));
 
-        //productImage.setProduct(product);
 
-        productImageRepository.save(productImage);
+        /**
+         * 为产品添加图片必须预先将图片上传的服务器，然后将图片登记到资源文件使用者记录中，否则服务器后台进程会定期检查上传的文件是否有使用
+         * 者，如果没有的话，那么距离上传时间超过8小时（具体由服务器配置决定）但无任何使用者的文件会从服务器删除。
+         */
+        images.forEach((image)->{
+
+            Optional<File> f = fileRepository.findByFilename(image);
+
+            if (!f.isPresent())
+                return;
+
+            /* 如果没有登记，那么登记*/
+            if (!fileUsageRepository.findFirstByFileAndOwnerTypeAndOwnerId(f.get(), "production", productId.toString()).isPresent()) {
+
+                FileUsage fileUsage = new FileUsage();
+
+                fileUsage.setFile(f.get());
+                fileUsage.setOwnerType("production");
+                fileUsage.setOwnerId(productId.toString());
+
+                fileUsageRepository.save(fileUsage);
+            }
+
+            String url = f.get().getUrl();
+
+            if (!url.endsWith("/"))
+                url += "/";
+
+            String resourceUrl = url+f.get().getFilename();
+
+            Optional<ProductImage> pi = productImageRepository.findFirstByProductAndResourceUrl(product, resourceUrl);
+
+            if (pi.isPresent())
+                return;
+
+
+            ProductImage productImage = new ProductImage();
+
+            productImage.setProduct(product);
+            productImage.setResourceUrl(resourceUrl);
+
+            productImageRepository.save(productImage);
+
+        });
+
+
     }
 
     @GetMapping("/{id}/images")

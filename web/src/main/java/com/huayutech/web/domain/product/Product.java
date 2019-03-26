@@ -10,7 +10,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@Setter @Getter
+@Data
+@EqualsAndHashCode(exclude = "images")
 @Entity
 @Table(name = "products")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler"})

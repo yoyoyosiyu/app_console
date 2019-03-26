@@ -1,15 +1,21 @@
 package com.huayutech.web.service;
 
 import com.huayutech.web.config.StorageProperties;
+import com.huayutech.web.domain.resouce.File;
+import com.huayutech.web.repository.resource.FileRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -17,12 +23,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    FileRepository fileRepository;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -54,6 +66,30 @@ public class FileSystemStorageService implements StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
+
+                System.out.println(System.getProperty("user.home"));
+
+                logger.info(String.format("成功将上传的文件%s 保存到%s", file.getOriginalFilename(), this.rootLocation.resolve(filename).toString()));
+
+
+                /* 记录上传的文件到数据库 */
+                Optional<File> optFileNote = fileRepository.findByFilename(filename);
+
+                if (!optFileNote.isPresent()) {
+                    File fileNote = new File();
+                    fileNote.setFilename(filename);
+                    fileNote.setUrl("/");
+                    fileNote.setType(new MimetypesFileTypeMap().getContentType(file.getOriginalFilename()));
+                    fileNote.setSize(file.getSize());
+
+                    fileRepository.save(fileNote);
+                }
+                else {
+                    fileRepository.save(optFileNote.get());
+                }
+
+
+
             }
         }
         catch (IOException e) {
@@ -102,6 +138,7 @@ public class FileSystemStorageService implements StorageService {
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
+
 
     @Override
     public void init() {

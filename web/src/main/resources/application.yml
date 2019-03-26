@@ -16,4 +16,4 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 storage:
-  location: /users/mac/
+#  location: /users/mac/

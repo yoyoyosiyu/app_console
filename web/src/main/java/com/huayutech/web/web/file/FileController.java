@@ -3,6 +3,8 @@ package com.huayutech.web.web.file;
 import com.huayutech.web.config.StorageProperties;
 import com.huayutech.web.service.StorageService;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +26,16 @@ import java.security.MessageDigest;
 
 public class FileController {
 
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+
 
     @Autowired
     StorageService storageService;
 
     @PostMapping
     public ResponseEntity doPostFile(@RequestParam("File") MultipartFile file){
+
 
 
         storageService.store(file);

@@ -2,9 +2,23 @@ package com.huayutech.web.domain.resouce;
 
 
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.thymeleaf.util.ArrayUtils;
 
+import javax.persistence.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
+
+@Data
+@EqualsAndHashCode(exclude = "usages")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class File {
 
     @Id
@@ -19,7 +33,23 @@ public class File {
     String url;
 
     @Column
-    @Temporal(TemporalType.TIME)
-    int createAt;
+    Long size;
+
+
+    @Column
+    String type;
+
+    @OneToMany(mappedBy = "file", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    Set<FileUsage> usages = Collections.emptySet();
+
+
+    @CreatedDate
+    @Column
+    Date createAt;
+
+    @LastModifiedDate
+    @Column
+    Date updateAt;
 
 }
