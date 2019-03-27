@@ -24,3 +24,34 @@ java.lang.NullPointerException: null
 如何避免在生成json的时候两个实体间的关系引起循环引用的问题
 
 使用@JsonManagedReference 和 @JsonBackReference
+
+
+### issue 3
+
+jpa 的自联表
+
+如果不使用外部连接表
+
+@Data
+@EqualsAndHashCode(exclude = "childCategories")
+@Entity
+@Table(name = "product_categories")
+public class ProductCategory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+
+    @Column
+    public String name;
+
+    @ManyToOne
+    @JoinColumn(name="parent_id", referencedColumnName = "id")
+    ProductCategory parent;
+
+
+    @OneToMany
+    @JoinColumn(name="parent_id")
+    public Set<ProductCategory> childCategories;
+}

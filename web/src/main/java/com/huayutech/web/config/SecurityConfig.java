@@ -33,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // DEBUG: disable the security check
         http.authorizeRequests().anyRequest().permitAll();
 
+
+
 //        http.authorizeRequests()
 //                .antMatchers("/login", "/webjars/**", "/register").permitAll()
 //                .antMatchers(HttpMethod.POST, "/register").permitAll()
