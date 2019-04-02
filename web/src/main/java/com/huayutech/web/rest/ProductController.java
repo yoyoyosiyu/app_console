@@ -2,14 +2,17 @@ package com.huayutech.web.rest;
 
 
 import com.huayutech.web.domain.product.Product;
+import com.huayutech.web.domain.product.ProductAttribute;
 import com.huayutech.web.domain.product.ProductImage;
 import com.huayutech.web.domain.resouce.File;
 import com.huayutech.web.domain.resouce.FileUsage;
+import com.huayutech.web.repository.product.ProductAttributeRepository;
 import com.huayutech.web.repository.product.ProductImageRepository;
 import com.huayutech.web.repository.product.ProductRepository;
 import com.huayutech.web.repository.resource.FileRepository;
 import com.huayutech.web.repository.resource.FileUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/${url.api.prefix:/api}/products")
 public class ProductController {
 
     @Autowired
@@ -33,12 +36,20 @@ public class ProductController {
     @Autowired
     FileUsageRepository fileUsageRepository;
 
+    @Autowired
+    ProductAttributeRepository productAttributeRepository;
+
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping
     public void createProduct(@RequestBody Product product) {
 
         productRepository.save(product);
+    }
+
+    @GetMapping()
+    public PageResponse<Product> getProducts(Pageable pageRequest) {
+        return PageResponse.of(productRepository.findAll(pageRequest));
     }
 
     @GetMapping("/{id}")
@@ -108,15 +119,34 @@ public class ProductController {
 
     }
 
-    @GetMapping("/{id}/images")
+    @GetMapping("/{productId}/images")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<ProductImage> getImagesOfProduct(@PathVariable(name = "id") Long productId) {
+    public List<ProductImage> getImagesOfProduct(@PathVariable Long productId) {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new EntityNotFoundException(String.format("product with id %s does not exist", productId)));
 
         return productImageRepository.findAllByProduct(product);
 
+
+    }
+
+
+    /**
+     * Add Attributes to product
+     */
+    @PostMapping("/{productId}/attributes")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void doPostAttributes(@PathVariable Long productId, @RequestBody List<ProductAttribute> productAttributes) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new EntityNotFoundException(String.format("product with id %s does not exist", productId)));
+
+
+        for(ProductAttribute productAttribute: productAttributes) {
+            productAttribute.setProduct(product);
+            productAttributeRepository.save(productAttribute);
+        }
 
     }
 

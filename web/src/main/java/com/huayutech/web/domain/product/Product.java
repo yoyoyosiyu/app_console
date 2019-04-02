@@ -29,4 +29,9 @@ public class Product {
     @JsonManagedReference
     Set<ProductImage> images = Collections.emptySet();
 
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    Set<ProductAttribute> attributes = Collections.emptySet();
+
 }
