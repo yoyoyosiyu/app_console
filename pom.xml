@@ -10,6 +10,7 @@
 
     <modules>
         <module>web</module>
+        <module>web-console-proxy</module>
     </modules>
 
 
