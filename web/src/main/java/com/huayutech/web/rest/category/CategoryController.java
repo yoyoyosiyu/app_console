@@ -1,6 +1,7 @@
-package com.huayutech.web.rest;
+package com.huayutech.web.rest.category;
 
 import com.huayutech.web.repository.category.ProductCategoryRepository;
+import com.huayutech.web.rest.ReferenceViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.huayutech.web.domain.category.ProductCategory;
@@ -9,7 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/${url.api.prefix:/api}/categories")
 public class CategoryController {
 
     @Autowired
