@@ -1,0 +1,7 @@
+server:
+  port: 8082
+
+authorization-server:
+  token-url: http://localhost:9000/oauth/token
+  client-id: clientid
+  client-secret: clientsecret

@@ -1,4 +1,4 @@
-package com.beijiake.webconsoleproxy;
+package com.beijiake.webproxystub;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

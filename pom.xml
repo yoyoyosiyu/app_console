@@ -10,7 +10,7 @@
 
     <modules>
         <module>web</module>
-        <module>web-console-proxy</module>
+        <module>web-proxy-stub</module>
     </modules>
 
 

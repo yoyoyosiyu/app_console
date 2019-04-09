@@ -34,5 +34,6 @@ public class ProductCategory {
 
     @OneToMany(mappedBy = "parent")
     @JsonManagedReference
+    @OrderBy("id")
     public Set<ProductCategory> childCategories = Collections.emptySet();
 }
