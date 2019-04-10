@@ -21,6 +21,10 @@ https://www.devglan.com/angular/angular-7-crud-example
 Spring Boot + Angular 5 +Spring Data + Rest Example(CRUD)
 https://www.devglan.com/spring-boot/spring-boot-angular-example
 
+非常不错的spring boot + angular 2 的开发视频
+https://www.youtube.com/watch?v=v7X_ZHdcNvc
+
+
 
 
 
