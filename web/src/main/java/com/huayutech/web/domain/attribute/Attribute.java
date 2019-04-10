@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.huayutech.web.domain.category.ProductCategory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -39,6 +40,12 @@ public class Attribute {
      * 是否必须
      */
     @Column
+    @ColumnDefault("true")
     boolean required;
+
+    @Column
+    @ColumnDefault("false")
+    boolean customizable;
+
 
 }

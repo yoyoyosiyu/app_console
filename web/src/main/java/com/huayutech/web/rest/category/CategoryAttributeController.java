@@ -4,6 +4,7 @@ import com.huayutech.web.domain.attribute.Attribute;
 import com.huayutech.web.domain.category.ProductCategory;
 import com.huayutech.web.repository.attribute.AttributeRepository;
 import com.huayutech.web.repository.category.ProductCategoryRepository;
+import com.huayutech.web.service.category.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,9 @@ public class CategoryAttributeController {
     @Autowired
     AttributeRepository attributeRepository;
 
+    @Autowired
+    ProductCategoryService productCategoryService;
+
     @PostMapping
     public void doPost(@PathVariable(name = "categoryId") Long categoryId, @RequestBody Attribute attribute) {
 
@@ -33,8 +37,8 @@ public class CategoryAttributeController {
 
     @GetMapping
     public List<Attribute> doGet(@PathVariable Long categoryId) {
-        ProductCategory productCategory = productCategoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
-        return attributeRepository.findAttributesByProductCategory(productCategory);
+
+        return productCategoryService.GetCategoryAttributes(categoryId, true);
     }
 
 

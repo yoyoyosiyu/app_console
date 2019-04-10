@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableConfigurationProperties({StorageProperties.class})
 public class WebApplication {
 
     public static void main(String[] args) {
