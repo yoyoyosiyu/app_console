@@ -17,7 +17,7 @@ spring:
 
 url:
   api:
-    prefix: "/api/v2"
+    prefix: "/api"
 
 storage:
 #  location: /users/mac/

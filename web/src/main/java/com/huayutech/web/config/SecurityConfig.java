@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // DEBUG: disable the security check
-        http.authorizeRequests().anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/about").authenticated().anyRequest().permitAll();
 
 
 
