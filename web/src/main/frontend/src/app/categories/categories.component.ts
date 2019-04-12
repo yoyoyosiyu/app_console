@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CategoryService} from "../services/category.service";
-import {forEach} from "@angular/router/src/utils/collection";
-import {Tree} from "@angular/router/src/utils/tree";
+import {NzFormatEmitEvent} from "ng-zorro-antd";
 
 class Category {
   id: number;
@@ -93,6 +92,10 @@ export class CategoriesComponent implements OnInit {
     return treeNode;
 
 
+  }
+
+  nzClickEvent(event: NzFormatEmitEvent): void {
+    console.log(event);
   }
 
 }

@@ -1,1 +1,50 @@
-<nz-tree [nzData]="nodes" nzShowLine> </nz-tree>
+<nz-page-header nzTitle="产品分类管理">
+  <nz-page-header-content>
+    <div class="wrap">
+      <div class="content">
+        <div class="content">
+          <p>产品分类管理通过将产品按照不同的分类进行分割，并且通过设置分类的特定属性和规格来进行更好的对产品进行设置，以便于更好的数据过滤和搜索</p>
+        </div>
+      </div>
+    </div>
+  </nz-page-header-content>
+</nz-page-header>
+
+<nz-layout style="background: #fff; padding: 16px 32px">
+
+
+    <nz-sider style="background: #fff">
+      <nz-tree [nzData]="nodes" nzShowLine (nzClick)="nzClickEvent($event)">
+      </nz-tree>
+    </nz-sider>
+    <nz-layout style="background: #fff; border-left: 1px solid rgb(235, 237, 240)">
+      <nz-content style="padding-left: 24px">
+        <nz-breadcrumb nz-page-header-breadcrumb nzSeparator=">">
+          <nz-breadcrumb-item><a>民用家具</a></nz-breadcrumb-item>
+          <nz-breadcrumb-item>座椅<a style="margin-left: 12px"><i nz-icon nzType="edit" nzTheme="fill"></i></a></nz-breadcrumb-item>
+        </nz-breadcrumb>
+
+        <nz-tabset>
+          <nz-tab nzTitle="基本信息">
+            Content of Tab Pane 1
+          </nz-tab>
+          <nz-tab nzTitle="分类属性">
+            Content of Tab Pane 2
+          </nz-tab>
+          <nz-tab nzTitle="分类规格">
+            <nz-alert
+              nzType="info"
+              nzMessage="为分类设置系统规格，系统规格会在用户发布商品的时候固定显示"
+              nzShowIcon>
+            </nz-alert>
+          </nz-tab>
+        </nz-tabset>
+
+      </nz-content>
+    </nz-layout>
+
+</nz-layout>
+
+
+
+
